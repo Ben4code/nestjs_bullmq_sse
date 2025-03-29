@@ -3,18 +3,20 @@ networks:
     driver: bridge
 
 services:
-  backend:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "${PORT}:${PORT}"
-    depends_on:
-      - backend_db
-    networks:
-      - backend_net
-    env_file:
-      - .env
+  # backend:
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "${PORT}:${PORT}"
+  #   depends_on:
+  #     - backend_db
+  #   networks:
+  #     - backend_net
+  #   env_file:
+  #     - .env
+
+
     # environment:
     #   - DATABASE_URL=postgres://postgres:postgres@Db :5432/postgres
     #   - NODE_ENV=development
@@ -23,10 +25,11 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+      - POSTGRES_USER=my_admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=backend_db
+      - POSTGRES_HOST=localhost
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
       - backend_net
