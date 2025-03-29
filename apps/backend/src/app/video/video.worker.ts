@@ -4,7 +4,7 @@ import { Job } from 'bullmq';
 
 @Processor(VideoToken, {
   concurrency: 3,
-  limiter: { duration: 10000, max: 10 }, 
+  limiter: { duration: 10000, max: 10 },
 })
 export class VideoWorker extends WorkerHost {
   async process(job: Job) {
