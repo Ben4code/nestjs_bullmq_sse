@@ -24,6 +24,7 @@ services:
   backend_db:
     image: postgres:latest
     restart: always
+    container_name: postgres_db
     environment:
       - POSTGRES_USER=my_admin
       - POSTGRES_PASSWORD=password
@@ -31,5 +32,32 @@ services:
       - POSTGRES_HOST=localhost
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    networks:
+      - backend_net
+
+  redis:
+    image: redis:alpine
+    restart: always
+    command: redis-server --appendonly yes
+    container_name: redis_db
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./apps/backend/redis/redis_db/data:/data/redis
+    environment:
+      - REDIS_PASSWORD=password
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+    networks:
+      - backend_net
+  
+  redis_insight:
+    image: redislabs/redisinsight:latest
+    restart: always
+    container_name: redis_insight
+    ports:
+      - "5540:5540"
+    volumes:
+      - ./apps/backend/redis/redis_insight/data:/data/redis_insight
     networks:
       - backend_net
